@@ -1,0 +1,88 @@
+{
+  "name": "anix-electron-app",
+  "version": "0.1.0",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "flowbite-react patch",
+    "electron": "electron main.js",
+    "dist": "electron-builder"
+  },
+  "dependencies": {
+    "apexcharts": "^3.52.0",
+    "deepmerge-ts": "^7.1.0",
+    "flowbite": "^2.4.1",
+    "flowbite-react": "^0.11.7",
+    "hls-video-element": "^1.5.0",
+    "markdown-to-jsx": "^7.4.7",
+    "media-chrome": "^4.9.0",
+    "next": "^14.2.26",
+    "next-runtime-env": "^3.3.0",
+    "prettier": "^3.5.3",
+    "react": "^18.2.0",
+    "react-cropper": "^2.3.3",
+    "react-dom": "^18.2.0",
+    "react-toastify": "^11.0.5",
+    "swiper": "^11.1.4",
+    "swr": "^2.2.5",
+    "videojs-video-element": "^1.4.1",
+    "zustand": "^4.5.4"
+  },
+  "devDependencies": {
+    "@iconify-json/fa6-brands": "^1.1.21",
+    "@iconify-json/material-symbols": "^1.1.83",
+    "@iconify-json/mdi": "^1.1.67",
+    "@iconify-json/solar": "^1.2.2",
+    "@iconify-json/twemoji": "^1.1.15",
+    "@iconify/tailwind": "^1.1.1",
+    "@types/node": "20.14.12",
+    "@types/react": "18.3.3",
+    "copy-webpack-plugin": "^12.0.2",
+    "electron": "^37.2.1",
+    "electron-builder": "^24.12.1",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "14.2.5",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "postcss": "^8.4.38",
+    "tailwind-scrollbar": "^3.1.0",
+    "tailwindcss": "^3.4.1"
+  },
+  "build": {
+    "appId": "com.lorendos.anixdesktop",
+    "productName": "AnixDesktop",
+    "files": [
+      "main.js",
+      "next.config.js",
+      "public/**/*",
+      ".next/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "pages/**/*",
+      "app/**/*",
+      "public/loading.html",
+      "components/**/*"
+    ],
+    "directories": {
+      "buildResources": "public/icons",
+      "output": "dist"
+    },
+    "win": {
+      "icon": "public/icons/app.ico",
+      "target": "nsis"
+    },
+    "linux": {
+      "icon": "public/icons/app.png"
+    },
+    "asar": false,
+    "extraResources": [
+      {
+        "from": "public/icons",
+        "to": "icons"
+      }
+    ]
+  }
+}

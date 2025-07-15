@@ -1,0 +1,15 @@
+.swiper-button:global(.swiper-button-disabled) {
+  opacity: 0 !important;
+}
+
+.section .swiper-button {
+  display: none !important;
+}
+
+@media (hover: hover) {
+  .section:hover .swiper-button {
+    display: flex !important;
+    width: 64px;
+    height: 64px;
+  }
+}

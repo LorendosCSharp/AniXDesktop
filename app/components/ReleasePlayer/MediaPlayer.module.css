@@ -1,0 +1,630 @@
+.media-controller {
+  --_primary-color: var(--media-primary-color, #fff);
+  --_secondary-color: var(--media-secondary-color, transparent);
+  --_accent-color: var(--media-accent-color, #fff);
+
+  --base: 18px;
+
+  font-size: calc(0.75 * var(--base));
+  font-family: Roboto, Arial, sans-serif;
+  --media-font-family: Roboto, helvetica neue, segoe ui, arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+
+  --media-primary-color: #fff;
+  --media-secondary-color: transparent;
+  --media-menu-background: rgba(28, 28, 28, 0.8);
+  --media-text-color: var(--_primary-color);
+  --media-control-hover-background: var(--media-secondary-color);
+
+  --media-range-track-height: calc(0.125 * var(--base));
+  --media-range-thumb-height: var(--base);
+  --media-range-thumb-width: var(--base);
+  --media-range-thumb-border-radius: var(--base);
+
+  --media-control-height: calc(2 * var(--base));
+}
+
+.media-controller[breakpointmd] {
+  --base: 20px;
+}
+
+/* The biggest size controller is tied to going fullscreen
+      instead of a player width */
+.media-controller[mediaisfullscreen] {
+  --base: 24px;
+}
+
+.media-controller:not([mediaisfullscreen]) {
+  border-radius: 8px;
+}
+
+.media-control-bar {
+  position: absolute;
+  height: calc(2 * var(--base));
+  line-height: calc(2 * var(--base));
+  bottom: calc(1 * var(--base));
+  left: var(--base);
+  right: var(--base);
+}
+
+.media-button {
+  --media-control-hover-background: var(--_secondary-color);
+  --media-tooltip-background: rgb(28 28 28 / 0.24);
+  --media-text-content-height: 1.2;
+  --media-tooltip-padding: 0.7em 1em;
+  --media-tooltip-distance: 8px;
+  --media-tooltip-container-margin: 18px;
+  position: relative;
+  padding: 0;
+  opacity: 0.9;
+  transition: opacity 0.1s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.svg {
+  fill: none;
+  stroke: var(--_primary-color, #fff);
+  stroke-width: 1;
+  stroke-linecap: "round";
+  stroke-linejoin: "round";
+}
+
+.svg .svg-shadow {
+  stroke: #000;
+  stroke-opacity: 0.15;
+  stroke-width: 2px;
+  fill: none;
+}
+
+.media-gradient-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: calc(12 * var(--base));
+  pointer-events: none;
+}
+
+.media-gradient-bottom::before {
+  content: "";
+  --gradient-steps:
+    hsl(0 0% 0% / 0) 0%, hsl(0 0% 0% / 0.013) 8.1%, hsl(0 0% 0% / 0.049) 15.5%,
+    hsl(0 0% 0% / 0.104) 22.5%, hsl(0 0% 0% / 0.175) 29%,
+    hsl(0 0% 0% / 0.259) 35.3%, hsl(0 0% 0% / 0.352) 41.2%,
+    hsl(0 0% 0% / 0.45) 47.1%, hsl(0 0% 0% / 0.55) 52.9%,
+    hsl(0 0% 0% / 0.648) 58.8%, hsl(0 0% 0% / 0.741) 64.7%,
+    hsl(0 0% 0% / 0.825) 71%, hsl(0 0% 0% / 0.896) 77.5%,
+    hsl(0 0% 0% / 0.951) 84.5%, hsl(0 0% 0% / 0.987) 91.9%, hsl(0 0% 0%) 100%;
+
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+  background: linear-gradient(to bottom, var(--gradient-steps));
+}
+
+.media-gradient-top {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: calc(8 * var(--base));
+  pointer-events: none;
+}
+
+.media-gradient-top::before {
+  content: "";
+  --gradient-steps:
+    hsl(0 0% 0% / 0) 0%, hsl(0 0% 0% / 0.013) 8.1%, hsl(0 0% 0% / 0.049) 15.5%,
+    hsl(0 0% 0% / 0.104) 22.5%, hsl(0 0% 0% / 0.175) 29%,
+    hsl(0 0% 0% / 0.259) 35.3%, hsl(0 0% 0% / 0.352) 41.2%,
+    hsl(0 0% 0% / 0.45) 47.1%, hsl(0 0% 0% / 0.55) 52.9%,
+    hsl(0 0% 0% / 0.648) 58.8%, hsl(0 0% 0% / 0.741) 64.7%,
+    hsl(0 0% 0% / 0.825) 71%, hsl(0 0% 0% / 0.896) 77.5%,
+    hsl(0 0% 0% / 0.951) 84.5%, hsl(0 0% 0% / 0.987) 91.9%, hsl(0 0% 0%) 100%;
+
+  position: absolute;
+  inset: 0;
+  opacity: 0.7;
+  background: linear-gradient(to top, var(--gradient-steps));
+}
+
+.anime-title {
+  position: absolute;
+  height: calc(2 * var(--base));
+  top: calc(0.5 * var(--base));
+  left: var(--base);
+  right: var(--base);
+}
+
+.media-settings-menu {
+  --media-menu-icon-height: 20px;
+  --media-menu-item-icon-height: 20px;
+  --media-settings-menu-min-width: calc(10 * var(--base));
+  --media-menu-transform-in: translateY(0) scale(1);
+  --media-menu-transform-out: translateY(20px) rotate(3deg) scale(1);
+  padding-block: calc(0.15 * var(--base));
+  margin-right: 10px;
+  margin-bottom: 17px;
+  border-radius: 8px;
+  z-index: 2;
+  user-select: none;
+}
+
+.media-source-dialog {
+  --media-menu-icon-height: 20px;
+  --media-menu-item-icon-height: 20px;
+  --media-settings-menu-min-width: calc(10 * var(--base));
+  --media-settings-menu-min-height: calc(2 * var(--base));
+  --media-menu-transform-in: translateY(0) scale(1);
+  --media-menu-transform-out: translateY(20px) rotate(3deg) scale(1);
+  background: rgba(28, 28, 28, 0.8);
+  min-width: var(--media-settings-menu-min-width, 170px);
+  min-height: var(--media-settings-menu-min-height, 170px);
+  position: absolute;
+  right: 10px;
+  bottom: calc(3 * var(--base));
+  padding: 0;
+  padding-block: calc(0.15 * var(--base));
+  padding-inline: calc(0.6 * var(--base));
+  margin-right: 10px;
+  margin-bottom: 17px;
+  border-radius: 8px;
+  user-select: none;
+  width: fit-content;
+  max-height: fit-content;
+  z-index: 5;
+}
+
+@media (min-width: 640px) {
+  .media-source-dialog {
+    max-height: 50%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .media-controller[mediaisfullscreen] .media-source-dialog {
+    max-height: 30%;
+  }
+}
+
+.media-controller media-chrome-dialog > div {
+  word-wrap: normal !important;
+}
+
+.media-settings-menu[hidden] {
+  display: block;
+  visibility: visible;
+  opacity: 0;
+}
+
+.media-settings-menu-item,
+.media-controller [role="menu"]::part(menu-item) {
+  --media-icon-color: var(--_primary-color);
+  margin-inline: calc(0.45 * var(--base));
+  height: calc(1.6 * var(--base));
+  font-size: calc(0.7 * var(--base));
+  font-weight: 400;
+  padding: 0;
+  padding-left: calc(0.4 * var(--base));
+  padding-right: calc(0.1 * var(--base));
+  border-radius: 6px;
+  text-shadow: none;
+}
+
+.media-controller [slot="submenu"]::part(back button) {
+  font-size: calc(0.7 * var(--base));
+}
+
+.media-settings-menu-item:hover {
+  --media-icon-color: #000;
+  color: #000;
+  background-color: #fff;
+}
+
+.media-settings-menu-item:hover [slot="submenu"]::part(menu-item),
+.media-controller [slot="submenu"]::part(back indicator) {
+  --media-icon-color: var(--_primary-color);
+}
+
+.media-settings-menu-item:hover [slot="submenu"]::part(menu-item):hover {
+  --media-icon-color: #000;
+  color: #000;
+  background-color: #fff;
+}
+
+.media-settings-menu-item[submenusize="0"] {
+  display: none;
+}
+
+.quality-settings[submenusize="1"] {
+  display: none;
+}
+
+@keyframes bounce-scale-play {
+  0% {
+    transform: scale(0.75, 0.75);
+  }
+  50% {
+    transform: scale(115%, 115%);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.media-button {
+  border-radius: 25%;
+  backdrop-filter: blur(10px) invert(15%) brightness(80%) opacity(0);
+  -webkit-backdrop-filter: blur(10px) invert(15%) brightness(80%) opacity(0);
+  transition:
+    backdrop-filter 0.3s,
+    -webkit-backdrop-filter 0.3s,
+    box-shadow 0.3s;
+}
+
+.media-button:hover {
+  /* background-color: rgba(0, 0, 0, 0.05); */
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 5px;
+  /* hue-rotate(120deg) */
+  backdrop-filter: blur(10px) invert(15%) brightness(80%) opacity(1);
+  -webkit-backdrop-filter: blur(10px) invert(15%) brightness(80%) opacity(1);
+  transition:
+    backdrop-filter 0.3s,
+    -webkit-backdrop-filter 0.3s;
+}
+
+.media-play-button .icon-play {
+  opacity: 0;
+  transform-box: view-box;
+  transform-origin: center center;
+  transform: scale(0.5, 0.5);
+  transition: all 0.5s;
+}
+
+.media-play-button[mediapaused] .icon-play {
+  opacity: 1;
+  transform: scale(1, 1);
+  animation: 0.35s bounce-scale-play ease-in-out;
+}
+
+@keyframes bounce-pause-left {
+  0% {
+    font-size: 10px;
+  }
+  50% {
+    font-size: 3px;
+  }
+  100% {
+    font-size: 4px;
+  }
+}
+
+@keyframes bounce-pause-right {
+  0% {
+    font-size: 10px;
+    transform: translateX(-8px);
+  }
+  50% {
+    font-size: 3px;
+    transform: translateX(1px);
+  }
+  100% {
+    font-size: 4px;
+    transform: translateX(0);
+  }
+}
+
+.media-play-button .pause-left,
+.media-play-button .pause-right {
+  font-size: 4px;
+  opacity: 1;
+  transform: translateX(0);
+  transform-box: view-box;
+}
+
+.media-play-button:not([mediapaused]) .pause-left {
+  animation: 0.3s bounce-pause-left ease-out;
+}
+
+.media-play-button:not([mediapaused]) .pause-right {
+  animation: 0.3s bounce-pause-right ease-out;
+}
+
+.media-play-button[mediapaused] .pause-left,
+.media-play-button[mediapaused] .pause-right {
+  opacity: 0;
+  font-size: 10px;
+}
+
+.media-play-button[mediapaused] .pause-right {
+  transform-origin: right center;
+  transform: translateX(-8px);
+}
+
+.media-settings-menu-button svg {
+  transition: transform 0.1s cubic-bezier(0.4, 0, 1, 1);
+  transform: rotateZ(0deg);
+}
+.media-settings-menu-button[aria-expanded="true"] svg {
+  transform: rotateZ(30deg);
+}
+
+.media-time-display {
+  position: relative;
+  padding: calc(0.5 * var(--base));
+  font-size: calc(0.7 * var(--base));
+  border-radius: calc(0.5 * var(--base));
+}
+
+.media-controller[breakpointmd] .media-time-display:not([showduration]) {
+  display: none;
+}
+
+.media-controller:not([breakpointmd]) .media-time-display[showduration] {
+  display: none;
+}
+
+.media-time-range {
+  height: calc(2 * var(--base));
+  border-radius: calc(0.25 * var(--base));
+
+  --media-range-track-backdrop-filter: invert(10%) blur(5px) brightness(110%);
+  --media-range-track-background: rgba(255, 255, 255, 0.2);
+  --media-range-track-pointer-background: rgba(255, 255, 255, 0.5);
+  --media-range-track-border-radius: calc(0.25 * var(--base));
+
+  --media-time-range-buffered-color: rgba(255, 255, 255, 0.4);
+  --media-range-bar-color: var(--media-accent-color);
+
+  --media-range-thumb-background: var(--media-accent-color);
+  --media-range-thumb-transition: opacity 0.1s linear;
+  --media-range-thumb-opacity: 0;
+
+  --media-preview-thumbnail-border: calc(0.125 * var(--base)) solid #fff;
+  --media-preview-thumbnail-border-radius: calc(0.5 * var(--base));
+  --media-preview-thumbnail-min-width: calc(8 * var(--base));
+  --media-preview-thumbnail-max-width: calc(10 * var(--base));
+  --media-preview-thumbnail-min-height: calc(5 * var(--base));
+  --media-preview-thumbnail-max-height: calc(7 * var(--base));
+  --media-preview-box-margin: 0 0 -10px;
+}
+.media-time-range:hover {
+  --media-range-thumb-opacity: 1;
+  --media-range-track-height: calc(0.25 * var(--base));
+}
+
+.media-preview-time-display {
+  font-size: calc(0.65 * var(--base));
+  padding-top: 0;
+}
+
+.media-mute-button {
+  position: relative;
+  opacity: 1;
+}
+
+.media-mute-button .muted-path {
+  transition: clip-path 0.2s ease-out;
+}
+
+.media-mute-button .muted-path-2 {
+  transition-delay: 0.2s;
+}
+
+.media-mute-button .muted-path {
+  clip-path: inset(0);
+}
+
+.media-mute-button:not([mediavolumelevel="off"]) .muted-path-1 {
+  clip-path: inset(0 0 100% 0);
+}
+
+.media-mute-button:not([mediavolumelevel="off"]) .muted-path-2 {
+  clip-path: inset(0 0 100% 0);
+}
+
+.media-mute-button .muted-path {
+  opacity: 0;
+}
+
+.media-mute-button[mediavolumelevel="off"] .muted-path {
+  opacity: 1;
+}
+
+.media-mute-button .vol-path {
+  opacity: 1;
+  transition: opacity 0.4s;
+}
+
+.media-mute-button[mediavolumelevel="off"] .vol-path {
+  opacity: 0;
+}
+
+.media-mute-button[mediavolumelevel="low"] .vol-high-path,
+.media-mute-button[mediavolumelevel="medium"] .vol-high-path {
+  opacity: 0;
+}
+
+.media-volume-range {
+  --media-range-track-background: rgba(255, 255, 255, 0.2);
+  --media-range-thumb-opacity: 0;
+}
+
+@keyframes volume-in {
+  0% {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(50%) rotate(1deg);
+  }
+  50% {
+    visibility: visible;
+    opacity: 1;
+    transform: rotate(-2deg);
+  }
+  100% {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes volume-out {
+  0% {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+  100% {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(50%) rotate(1deg);
+  }
+}
+
+.media-volume-range-wrapper {
+  opacity: 0;
+  visibility: hidden;
+
+  position: absolute;
+  top: -100%;
+  left: calc(4 * var(--base));
+
+  width: calc(10 * var(--base));
+  height: calc(2.5 * var(--base));
+  transform-origin: center left;
+}
+
+.media-volume-range {
+  /*
+      Hide range and animation until mediavolume attribute is set.
+      visibility didn't work, hovering over media-volume-range-wrapper
+      caused it to show. Should require mute-button:hover.
+    */
+  opacity: 0;
+  transition: opacity 0s 1s;
+
+  width: calc(10 * var(--base));
+  height: var(--base);
+  padding: 0;
+  border-radius: calc(0.25 * var(--base));
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
+
+  --media-range-bar-color: var(--media-accent-color);
+
+  --media-range-padding-left: 0;
+  --media-range-padding-right: 0;
+
+  --media-range-track-width: calc(10 * var(--base));
+  --media-range-track-height: var(--base);
+  --media-range-track-border-radius: calc(0.25 * var(--base));
+  --media-range-track-backdrop-filter: blur(10px) brightness(80%);
+
+  /* This makes zero volume still show some of the bar.
+       I can't make the bar have curved corners otherwise though. */
+  --media-range-thumb-width: var(--base);
+  --media-range-thumb-border-radius: calc(0.25 * var(--base));
+
+  /* The Sutro design has a gradient like this, but not sure I like it */
+  /* --media-range-thumb-box-shadow: 10px 0px 20px rgba(255, 255, 255, 0.5); */
+}
+
+.media-volume-range[mediavolume] {
+  opacity: 1;
+}
+
+.media-controller[keyboardcontrol] .media-volume-range:focus {
+  /* TODO: This appears to be creating a think outline */
+  outline: 1px solid rgba(27, 127, 204, 0.9);
+}
+
+.media-mute-button:hover + .media-volume-range-wrapper,
+.media-mute-button:focus + .media-volume-range-wrapper,
+.media-mute-button:focus-within + .media-volume-range-wrapper,
+.media-volume-range-wrapper:hover,
+.media-volume-range-wrapper:focus,
+.media-volume-range-wrapper:focus-within {
+  animation: 0.3s volume-in forwards ease-out;
+}
+
+.media-volume-range-wrapper:not(:hover, :focus-within) {
+  animation: 0.3s volume-out ease-out;
+}
+
+/* When keyboard navigating the volume range and wrapper need to always be visible
+    otherwise focus state can't land on it. This is ok when keyboard navigating because
+    the hovering issues aren't a concern, unless you happen to be keyboard AND mouse navigating.
+  */
+.media-controller[keyboardcontrol] .media-volume-range-wrapper,
+.media-controller[keyboardcontrol] .media-volume-range-wrapper:focus-within,
+.media-controller[keyboardcontrol]
+  .media-volume-range-wrapper:focus-within
+  .media-volume-range {
+  visibility: visible;
+}
+
+/* Having trouble getting @property to work in the shadow dom
+                   to clean this up. Like https://codepen.io/luwes/pen/oNRyZyx */
+
+.media-fullscreen-button .fs-arrow {
+  translate: 0% 0%;
+}
+.media-fullscreen-button:hover .fs-arrow {
+  animation: 0.35s up-left-bounce cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.media-fullscreen-button:hover .fs-enter-top,
+.media-fullscreen-button:hover .fs-exit-bottom {
+  animation-name: up-right-bounce;
+}
+
+.media-fullscreen-button:hover .fs-enter-bottom,
+.media-fullscreen-button:hover .fs-exit-top {
+  animation-name: down-left-bounce;
+}
+
+@keyframes up-left-bounce {
+  0% {
+    translate: 0 0;
+  }
+  50% {
+    translate: -4% -4%;
+  }
+}
+@keyframes up-right-bounce {
+  0% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 4% -4%;
+  }
+}
+@keyframes down-left-bounce {
+  0% {
+    translate: 0 0;
+  }
+  50% {
+    translate: -4% 4%;
+  }
+}
+@keyframes down-right-bounce {
+  0% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 4% 4%;
+  }
+}
+
+.media-controller:not([breakpointmd]) .media-pip-button {
+  display: none;
+}
+
+.media-controller media-rendition-menu[mediarenditionunavailable],
+.media-controller media-volume-range[mediavolumeunavailable],
+.media-controller media-airplay-button[mediaairplayunavailable],
+.media-controller media-fullscreen-button[mediafullscreenunavailable],
+.media-controller media-cast-button[mediacastunavailable],
+.media-controller media-pip-button[mediapipunavailable] {
+  display: none;
+}

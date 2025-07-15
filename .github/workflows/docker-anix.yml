@@ -1,0 +1,30 @@
+name: Build and Publish 'anix' to Docker Hub
+
+on:
+  push:
+    branches:
+      - V3
+    paths:
+      - 'app/**'
+      - 'Dockerfile'
+      - 'middleware.ts'
+      - 'next.config.js'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Dynamically set 'tag' environment variable
+        run: echo "tag=$(date +'%d-%m-%Y')" >> $GITHUB_ENV
+      - name: Build Image
+        run: |
+          docker build . -t radiquum/anix:latest
+          docker tag radiquum/anix:latest radiquum/anix:${{ env.tag }}
+      - name: Publish Image
+        run: |
+          docker login -u radiquum -p ${{ secrets.DOCKERHUB_TOKEN }}
+          docker push radiquum/anix:latest
+          docker push radiquum/anix:${{ env.tag }}

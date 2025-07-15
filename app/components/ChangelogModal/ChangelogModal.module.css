@@ -1,0 +1,20 @@
+.markdown h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.markdown h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-block: 1rem 0.25rem;
+}
+
+.markdown ul {
+    list-style-type: disc;
+    -webkit-padding-start: 20px;
+    padding-inline-start: 20px;
+}
+
+.markdown a {
+    text-decoration: underline;
+}
