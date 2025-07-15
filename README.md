@@ -11,7 +11,8 @@ AniXDesktop is an unofficial web client for AniXart, built as a cross-platform d
 - Multi-language support
 
 ---
-## Disclaimer the app can load pretty long , because nneds to start a local server
+## Disclaimer
+The app can load pretty long , because needs to start a local server. If the load time is too long , re-open it. If nothing changes open issue
 
 ## Getting Started
 
