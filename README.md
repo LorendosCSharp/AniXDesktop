@@ -59,13 +59,6 @@ npm run lint
 npm run build
 ```
 
-### 2. Patch flowbite-react (postinstall script runs automatically after install)
-
-If you need to run it manually:
-```sh
-npm run postinstall
-```
-
 ### 3. Run the Electron app
 
 ```sh
