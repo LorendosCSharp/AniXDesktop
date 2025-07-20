@@ -15,6 +15,7 @@ import { Spinner } from "./components/Spinner/Spinner";
 import { ChangelogModal } from "#/components/ChangelogModal/ChangelogModal";
 import { Bounce, ToastContainer } from "react-toastify";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const App = (props) => {
@@ -23,7 +24,6 @@ export const App = (props) => {
   const [showChangelog, setShowChangelog] = useState(false);
   const [currentVersion, setCurrentVersion] = useState("");
   const [previousVersions, setPreviousVersions] = useState([]);
-
   useEffect(() => {
     async function _checkVersion() {
       const res = await fetch("/api/version");

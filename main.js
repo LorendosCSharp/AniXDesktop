@@ -1,4 +1,4 @@
-const { app, BrowserWindow, net } = require('electron');
+const { app, BrowserWindow, net, globalShortcut } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
 
@@ -7,6 +7,7 @@ let nextServer;
 const PORT = process.env.PORT || 3000;
 const SERVER_URL = `http://localhost:${PORT}`;
 const LOADING_FILE = path.join(__dirname, 'public', 'loading.html');
+let menuVisibility = false;
 
 function getIconPath() {
     const iconName = process.platform === 'win32' ? 'app.ico'
@@ -29,8 +30,15 @@ function createWindow() {
         },
         icon: getIconPath(),
     });
-    mainWindow.setMenuBarVisibility(false)
+
     mainWindow.fullScreen = true
+    globalShortcut.register('CommandOrControl+D', () => {
+        if (mainWindow) {
+            menuVisibility = !menuVisibility;
+            mainWindow.setMenuBarVisibility(menuVisibility);
+        }
+    });
+
 
     // First show loading screen
     mainWindow.loadFile(LOADING_FILE)
@@ -48,6 +56,7 @@ function createWindow() {
 
 function checkServerAndLoadApp() {
     const request = net.request(SERVER_URL);
+    console.log("trying to do something")
     request.on('response', () => {
         request.abort();
         console.log('Server ready, loading main app...');
@@ -65,9 +74,6 @@ function loadMainApp() {
     mainWindow.loadURL(SERVER_URL)
         .then(() => {
             console.log('Main app loaded successfully');
-            if (!app.isPackaged) {
-                mainWindow.webContents.openDevTools();
-            }
         })
         .catch(err => {
             console.error('Failed to load main app:', err);

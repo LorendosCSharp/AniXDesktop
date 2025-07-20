@@ -94,11 +94,10 @@ export const Navbar = () => {
                 <Link
                   href={item.href}
                   key={`navbar__${item.id}`}
-                  className={`flex-col items-center justify-center gap-1 lg:flex-row ${
-                    item.isAuthRequired && !userStore.isAuth ? "hidden"
+                  className={`flex-col items-center justify-center gap-1 lg:flex-row ${item.isAuthRequired && !userStore.isAuth ? "hidden"
                     : item.isShownOnMobile ? "flex"
-                    : "hidden sm:flex"
-                  } ${[item.href, item.hrefInCategory].includes("/" + pathname.split("/")[1]) ? "font-bold" : "font-medium"} transition-all`}
+                      : "hidden sm:flex"
+                    } ${[item.href, item.hrefInCategory].includes("/" + pathname.split("/")[1]) ? "font-bold" : "font-medium"} transition-all`}
                 >
                   <span
                     className={`w-6 h-6 iconify ${[item.href, item.hrefInCategory].includes("/" + pathname.split("/")[1]) ? item.icon.active : item.icon.default}`}
@@ -127,7 +126,7 @@ export const Navbar = () => {
                   Войти
                 </span>
               </Link>
-            : <>
+              : <>
                 <Link
                   href={`/profile/${userStore.user.id}`}
                   className={`hidden lg:flex flex-col lg:flex-row items-center gap-1 ${pathname == `/profile/${userStore.user.id}` ? "font-bold" : "font-medium"} transition-all`}
@@ -151,15 +150,15 @@ export const Navbar = () => {
                     className={`flex flex-col sm:hidden items-center gap-1 ${pathname == menuItems[preferenceStore.flags.showFifthButton].href ? "font-bold" : "font-medium"} transition-all`}
                   >
                     <span
-                    className={`w-6 h-6 iconify ${pathname == menuItems[preferenceStore.flags.showFifthButton].href ? menuItems[preferenceStore.flags.showFifthButton].icon.active : menuItems[preferenceStore.flags.showFifthButton].icon.default}`}
-                  ></span>
+                      className={`w-6 h-6 iconify ${pathname == menuItems[preferenceStore.flags.showFifthButton].href ? menuItems[preferenceStore.flags.showFifthButton].icon.active : menuItems[preferenceStore.flags.showFifthButton].icon.default}`}
+                    ></span>
                     <span
                       className={`text-xs sm:text-base ${preferenceStore.flags.showNavbarTitles == "always" || preferenceStore.flags.showNavbarTitles == "links" || (preferenceStore.flags.showNavbarTitles == "selected" && pathname == menuItems[preferenceStore.flags.showFifthButton].href) ? "block" : "hidden"}`}
                     >
                       {menuItems[preferenceStore.flags.showFifthButton].title}
                     </span>
                   </Link>
-                : ""}
+                  : ""}
                 <Link
                   href={`/menu`}
                   className={`flex flex-col lg:hidden items-center gap-1 ${pathname == `/menu` || pathname == `/profile/${userStore.user.id}` ? "font-bold" : "font-medium"} transition-all`}

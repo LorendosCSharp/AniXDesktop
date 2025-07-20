@@ -7,6 +7,9 @@ import { useUserStore } from "../store/auth";
 import { _FetchHomePageReleases } from "#/api/utils";
 import { Button, ButtonGroup } from "flowbite-react";
 import { useRouter } from "next/navigation";
+import Filter from "components/Filter/Filter";
+
+
 
 export function IndexCategoryPage(props) {
   const token = useUserStore((state) => state.token);
@@ -14,6 +17,8 @@ export function IndexCategoryPage(props) {
   const [content, setContent] = useState(null);
   const [page, setPage] = useState(0);
   const router = useRouter();
+
+  const [filtersModalOpen, setFiltersModalOpen] = useState(false);
 
   useEffect(() => {
     async function _loadInitialReleases() {
@@ -52,15 +57,11 @@ export function IndexCategoryPage(props) {
 
   return (
     <>
-      <div className="mb-4 overflow-auto">
-        <ButtonGroup>
-          <Button className="whitespace-nowrap" disabled={props.slug == "last"} color="light" onClick={() => router.push("/home/last")}>{props.SectionTitleMapping["last"]}</Button>
-          <Button className="whitespace-nowrap" disabled={props.slug == "finished"} color="light" onClick={() => router.push("/home/finished")}>{props.SectionTitleMapping["finished"]}</Button>
-          <Button className="whitespace-nowrap" disabled={props.slug == "ongoing"} color="light" onClick={() => router.push("/home/ongoing")}>{props.SectionTitleMapping["ongoing"]}</Button>
-          <Button className="whitespace-nowrap" disabled={props.slug == "announce"} color="light" onClick={() => router.push("/home/announce")}>{props.SectionTitleMapping["announce"]}</Button>
-          <Button className="whitespace-nowrap" disabled={props.slug == "films"} color="light" onClick={() => router.push("/home/films")}>{props.SectionTitleMapping["films"]}</Button>
-        </ButtonGroup>
-      </div>
+      <div className="mb-4 overflow-auto inline-flex">
+        <Filter isShown={filtersModalOpen} setShown={setFiltersModalOpen} />
+        <Button className="whitespace-nowrap" color="light" onClick={() => setFiltersModalOpen(true)}>Фильтры</Button>
+
+      </div >
       {content && content.length > 0 ? (
         <ReleaseSection
           sectionTitle={props.SectionTitleMapping[props.slug]}
@@ -77,7 +78,8 @@ export function IndexCategoryPage(props) {
             В списке {props.SectionTitleMapping[props.slug]} пока ничего нет...
           </p>
         </div>
-      )}
+      )
+      }
       <Button
         className="w-full"
         color={"light"}

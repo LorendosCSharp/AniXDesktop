@@ -7,6 +7,7 @@ const SectionTitleMapping = {
   ongoing: "Выходит",
   announce: "Анонсированные релизы",
   films: "Фильмы",
+
 };
 
 export async function generateMetadata({ params }) {

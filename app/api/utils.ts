@@ -1,4 +1,5 @@
-import { USER_AGENT, ENDPOINTS } from "./config";
+import { IFilters } from "#/components/Filter/IFilter";
+import { USER_AGENT, ENDPOINTS, API_PREFIX, NEXT_PUBLIC_API_URL, filtersStorageKey } from "./config";
 export const HEADERS = {
   "User-Agent": USER_AGENT,
   "Content-Type": "application/json; charset=UTF-8",
@@ -275,13 +276,118 @@ export function minutesToTime(
   }
 }
 
-const StatusList: Record<string, null | number> = {
-  last: null,
-  finished: 1,
-  ongoing: 2,
-  announce: 3,
+export const StatusList: Record<string, null | number> = {
+  Неважно: null,
+  Вышел: 1,
+  Выходит: 2,
+  Анонс: 3,
+};
+export const CategoryList: Record<string, null | number> = {
+  Неважно: null,
+  Сериал: 1,
+  "Полнометражный фильм": 2,
+  OVA: 3,
+  Дорама: 4
+};
+export const AgeRatingList: Record<string, null | number> = {
+  "0+": 1,
+  "6+": 2,
+  "12+": 3,
+  "16+": 4,
+  "18+": 5,
 };
 
+export const BookmarksList = {
+  watching: 1,
+  planned: 2,
+  watched: 3,
+  delayed: 4,
+  abandoned: 5,
+};
+
+export const SortList: Record<string, null | number> = {
+  "По дате добавлению": 0,
+  "По рейтингу": 1,
+  "По годам": 2,
+  "По популярности": 3,
+};
+
+export const EpisodeDurationFromList: Record<string, null | number> = {
+  "Неважно": null,
+  "До 10 минут": null,
+  "До 30 минут": null,
+  "Более 30 минут": 30
+}
+export const EpisodeDurationToList: Record<string, null | number> = {
+  "Неважно": null,
+  "До 10 минут": 10,
+  "До 30 минут": 30,
+  "Более 30 минут": null
+}
+
+export const EpisodesFromList: Record<string, null | number> = {
+  "Неважно": null,
+  "От 1 до 12": 1,
+  "От 13 до 25": 13,
+  "От 26 до 100": 26,
+  "Больше 100": 100
+}
+export const EpisodesToList: Record<string, null | number> = {
+  "Неважно": null,
+  "От 1 до 12": 12,
+  "От 13 до 25": 25,
+  "От 26 до 100": 100,
+  "Больше 100": null
+}
+
+export function getFilters() {
+  const storedFilters = sessionStorage.getItem(filtersStorageKey);
+  let body = null;
+  let filters: IFilters;
+  if (storedFilters) {
+    console.log("Founded stored filters");
+    filters = JSON.parse(storedFilters);
+    body = {
+      country: filters.country,
+      season: filters.season,
+      sort: SortList[filters.sort],
+      studio: filters.studio,
+      age_ratings: filters.ageRating.map(age => AgeRatingList[age]),
+      category_id: CategoryList[filters.category],
+      end_year: filters.fromYear,
+      start_year: filters.toYear,
+      episode_duration_from: EpisodeDurationFromList[filters.episodeDuration],
+      episode_duration_to: EpisodeDurationToList[filters.episodeDuration],
+      episodes_from: EpisodesFromList[filters.episode],
+      episodes_to: EpisodesToList[filters.episode],
+      genres: filters.genres,
+      profile_list_exclusions: filters.bookmarks,
+      status_id: StatusList[filters.status],
+      is_genres_exclude_mode_enabled: filters.excludeGenres,
+    }
+  } else {
+    console.log("No filters found");
+    body = {
+      country: null,
+      season: null,
+      sort: 0,
+      studio: null,
+      age_ratings: [],
+      category_id: null,
+      end_year: null,
+      start_year: null,
+      episode_duration_from: 1,
+      episode_duration_to: 2,
+      episodes_from: null,
+      episodes_to: null,
+      genres: [],
+      profile_list_exclusions: [],
+      status_id: null,
+      is_genres_exclude_mode_enabled: false,
+    }
+  }
+  return JSON.stringify(body);
+}
 export async function _FetchHomePageReleases(
   status: string,
   token: string | null,
@@ -294,27 +400,6 @@ export async function _FetchHomePageReleases(
   } else {
     statusId = StatusList[status];
   }
-
-  const body = {
-    country: null,
-    season: null,
-    sort: 0,
-    studio: null,
-    age_ratings: [],
-    category_id: categoryId,
-    end_year: null,
-    episode_duration_from: null,
-    episode_duration_to: null,
-    episodes_from: null,
-    episodes_to: null,
-    genres: [],
-    profile_list_exclusions: [],
-    start_year: null,
-    status_id: statusId,
-    types: [],
-    is_genres_exclude_mode_enabled: false,
-  };
-
   let url: string;
   url = `${ENDPOINTS.filter}/${page}`;
   if (token) {
@@ -324,7 +409,7 @@ export async function _FetchHomePageReleases(
   const data: Object = fetch(url, {
     method: "POST",
     headers: HEADERS,
-    body: JSON.stringify(body),
+    body: getFilters(),
   })
     .then((response) => {
       if (response.ok) {
@@ -343,22 +428,7 @@ export async function _FetchHomePageReleases(
   return data;
 }
 
-export const BookmarksList = {
-  watching: 1,
-  planned: 2,
-  watched: 3,
-  delayed: 4,
-  abandoned: 5,
-};
 
-export const SortList = {
-  adding_descending: 1,
-  adding_ascending: 2,
-  year_descending: 3,
-  year_ascending: 4,
-  alphabet_descending: 5,
-  alphabet_ascending: 6,
-};
 
 export function b64toBlob(
   b64Data: string,

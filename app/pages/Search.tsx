@@ -8,7 +8,7 @@ import { useScrollPosition } from "#/hooks/useScrollPosition";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useUserStore } from "../store/auth";
-import { Button, Dropdown, DropdownItem, Modal, ModalBody, ModalFooter, ModalHeader } from "flowbite-react";
+import { Button } from "flowbite-react";
 import { CollectionsSection } from "#/components/CollectionsSection/CollectionsSection";
 import { UserSection } from "#/components/UserSection/UserSection";
 import { useSWRfetcher } from "#/api/utils";
@@ -81,6 +81,7 @@ export function SearchPage() {
   const [filtersModalOpen, setFiltersModalOpen] = useState(false);
 
   const userStore = useUserStore();
+
 
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (where == "releases") {
@@ -225,13 +226,6 @@ export function SearchPage() {
             </button>
           </div>
         </form>
-        <Button
-          color="light"
-          size="xl"
-          onClick={() => setFiltersModalOpen(true)}
-        >
-          Фильтры
-        </Button>
       </div>
       <div className="mt-2">
         {data && data[0].related && <RelatedSection {...data[0].related} />}
@@ -243,22 +237,22 @@ export function SearchPage() {
                   sectionTitle="Найденные Коллекции"
                   content={content}
                 />
-              : where == "profiles" ?
-                <UserSection
-                  sectionTitle="Найденные Пользователи"
-                  content={content}
-                />
-              : <ReleaseSection
-                  sectionTitle="Найденные релизы"
-                  content={content}
-                />
+                : where == "profiles" ?
+                  <UserSection
+                    sectionTitle="Найденные Пользователи"
+                    content={content}
+                  />
+                  : <ReleaseSection
+                    sectionTitle="Найденные релизы"
+                    content={content}
+                  />
               }
             </>
-          : <div className="flex flex-col items-center justify-center min-w-full gap-4 mt-12 text-xl">
+            : <div className="flex flex-col items-center justify-center min-w-full gap-4 mt-12 text-xl">
               <span className="w-24 h-24 iconify-color twemoji--crying-cat"></span>
               <p>Странно, аниме не найдено, попробуйте другой запрос...</p>
             </div>
-        : isLoading && (
+          : isLoading && (
             <div className="flex items-center justify-center min-w-full min-h-screen">
               <Spinner />
             </div>
@@ -276,7 +270,7 @@ export function SearchPage() {
         data.length > 1 &&
         (where == "releases" ?
           data[data.length - 1].releases.length == 25
-        : data[data.length - 1].content.length == 25)
+          : data[data.length - 1].content.length == 25)
       ) ?
         <Button
           className="w-full"
@@ -288,155 +282,8 @@ export function SearchPage() {
             <span className="text-lg">Загрузить ещё</span>
           </div>
         </Button>
-      : ""}
-      <FiltersModal
-        isOpen={filtersModalOpen}
-        setIsOpen={setFiltersModalOpen}
-        where={where}
-        setWhere={setWhere}
-        list={list}
-        setList={setList}
-        isAuth={userStore.isAuth}
-        searchBy={searchBy}
-        setSearchBy={setSearchBy}
-        setContent={setContent}
-      />
+        : ""}
     </>
   );
 }
 
-const FiltersModal = (props: {
-  isOpen: boolean;
-  setIsOpen: any;
-  where: string;
-  setWhere: any;
-  list: string;
-  setList: any;
-  isAuth: boolean;
-  searchBy: string;
-  setSearchBy: any;
-  setContent: any;
-}) => {
-  const router = useRouter();
-  const [where, setWhere] = useState(props.where);
-  const [list, setList] = useState(props.list);
-  const [searchBy, setSearchBy] = useState(props.searchBy);
-
-  function _cancel() {
-    setWhere(props.where);
-    setList(props.list);
-    setSearchBy(props.searchBy);
-    props.setIsOpen(false);
-  }
-
-  function _accept() {
-    const Params = new URLSearchParams(window.location.search);
-
-    if (props.where != where) {
-      Params.set("where", where);
-      props.setWhere(where);
-    }
-
-    if (where == "list") {
-      Params.set("list", list);
-      props.setList(list);
-    } else {
-      Params.delete("list");
-    }
-
-    if (!["profiles", "collections"].includes(where)) {
-      Params.set("searchBy", searchBy);
-      props.setSearchBy(searchBy);
-    } else {
-      Params.delete("searchBy");
-      props.setSearchBy("name");
-    }
-
-    props.setContent(null);
-
-    const url = new URL(`/search?${Params.toString()}`, window.location.origin);
-    router.push(url.toString());
-  }
-
-  return (
-    <Modal show={props.isOpen} onClose={() => _cancel()}>
-      <ModalHeader>Фильтры</ModalHeader>
-      <ModalBody>
-        <div className="my-4">
-          <div className="flex items-center justify-between">
-            <p className="font-bold dark:text-white">Искать в</p>
-            <Dropdown label={WhereMapping[where]} color="blue">
-              {Object.keys(WhereMapping).map((item) => {
-                if (
-                  ["list", "history", "collections", "favorites"].includes(
-                    item
-                  ) &&
-                  !props.isAuth
-                ) {
-                  return <></>;
-                } else {
-                  return (
-                    <DropdownItem
-                      onClick={() => setWhere(item)}
-                      key={`where--${item}`}
-                    >
-                      {WhereMapping[item]}
-                    </DropdownItem>
-                  );
-                }
-              })}
-            </Dropdown>
-          </div>
-        </div>
-        {props.isAuth && where == "list" && ListsMapping.hasOwnProperty(list) ?
-          <div className="my-4">
-            <div className="flex items-center justify-between">
-              <p className="font-bold dark:text-white">Список</p>
-              <Dropdown label={ListsMapping[list].name} color="blue">
-                {Object.keys(ListsMapping).map((item) => {
-                  return (
-                    <DropdownItem
-                      onClick={() => setList(item)}
-                      key={`list--${item}`}
-                    >
-                      {ListsMapping[item].name}
-                    </DropdownItem>
-                  );
-                })}
-              </Dropdown>
-            </div>
-          </div>
-        : ""}
-        {!["profiles", "collections"].includes(where) ?
-          <div className="my-4">
-            <div className="flex items-center justify-between">
-              <p className="font-bold dark:text-white">Искать по</p>
-              <Dropdown label={TagMapping[searchBy].name} color="blue">
-                {Object.keys(TagMapping).map((item) => {
-                  return (
-                    <DropdownItem
-                      onClick={() => setSearchBy(item)}
-                      key={`tag--${item}`}
-                    >
-                      {TagMapping[item].name}
-                    </DropdownItem>
-                  );
-                })}
-              </Dropdown>
-            </div>
-          </div>
-        : ""}
-      </ModalBody>
-      <ModalFooter>
-        <div className="flex justify-end w-full gap-2">
-          <Button color="red" onClick={() => _cancel()}>
-            Отменить
-          </Button>
-          <Button color="blue" onClick={() => _accept()}>
-            Применить
-          </Button>
-        </div>
-      </ModalFooter>
-    </Modal>
-  );
-};
