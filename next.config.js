@@ -1,6 +1,5 @@
-const withFlowbiteReact = require("flowbite-react/plugin/nextjs");
 /** @type {import('next').NextConfig} */
-const NextConfig = {
+const nextConfig = {
   output: "standalone",
   reactStrictMode: false,
   images: {
@@ -80,6 +79,4 @@ const NextConfig = {
   },
 };
 
-const config = withFlowbiteReact(NextConfig);
-
-module.exports = config;
+module.exports = nextConfig;

@@ -1,6 +1,6 @@
 // components/LabeledDropdown.tsx
 import { Dropdown } from "flowbite-react";
-import React from "react";
+import React, { ReactElement } from "react";
 import { ReactNode, useState, isValidElement, cloneElement } from "react";
 
 interface LabeledDropdownProps {
@@ -29,7 +29,7 @@ export const LabeledDropdown = ({
 
     const enhancedChildren = React.Children.map(children, (child) => {
         if (isValidElement(child)) {
-            return cloneElement(child, {
+            return cloneElement(child as ReactElement, {
                 onClick: () => handleSelect(child.props.children),
             });
         }

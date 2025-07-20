@@ -51,8 +51,8 @@ export const ChangelogModal = (props: {
           {currentVersionChangelog}
         </Markdown>
         <Accordion collapseAll={true} className="mt-4">
-          {props.previousVersions.length > 0 &&
-            props.previousVersions.map((version) => {
+          {
+            (props.previousVersions ?? []).map((version) => {
               return (
                 <AccordionPanel key={version}>
                   <AccordionTitle
@@ -76,7 +76,7 @@ export const ChangelogModal = (props: {
                       <Markdown className={Styles.markdown}>
                         {previousVersionsChangelog[version]}
                       </Markdown>
-                    : <div>Загрузка ...</div>}
+                      : <div>Загрузка ...</div>}
                   </AccordionContent>
                 </AccordionPanel>
               );

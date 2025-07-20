@@ -1,5 +1,5 @@
 // components/MultiSelectDropdown.tsx
-import React, { ReactNode, isValidElement, cloneElement } from "react";
+import React, { ReactNode, isValidElement, cloneElement, ReactElement } from "react";
 import { Button, Dropdown } from "flowbite-react";
 
 interface MultiSelectDropdownProps {
@@ -39,7 +39,7 @@ export const MultiSelectDropdown = ({
             const itemLabel = child.props.children;
             const isSelected = selectedItems.includes(itemLabel);
 
-            return cloneElement(child, {
+            return cloneElement(child as ReactElement, {
                 onClick: () => handleSelect(itemLabel),
                 className: `${isSelected ? "bg-blue-200 font-bold" : ""
                     } cursor-pointer px-3 py-1 hover:bg-blue-100`,

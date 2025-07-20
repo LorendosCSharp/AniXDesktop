@@ -1,4 +1,4 @@
-export const CURRENT_APP_VERSION = "3.7.0";
+export const CURRENT_APP_VERSION = "0.1.1";
 export const filtersStorageKey = "filters";
 import { env } from "next-runtime-env";
 
