@@ -1,20 +1,20 @@
 {
-  "name": "anix-electron-app",
+  "name": "AnixDesktop",
   "version": "0.1.1",
   "author": "Leonid Osman (Lorendos)",
   "private": true,
   "main": "main.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider && next build",
+    "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "build": "next build && electron-builder",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "flowbite-react patch",
-    "electron": "electron main.js",
-    "dist": "electron-builder"
+    "electron": "electron main.js"
   },
   "dependencies": {
     "apexcharts": "^3.52.0",
+    "concurrently": "^9.2.0",
     "deepmerge-ts": "^7.1.0",
     "electron-log": "5.4.1",
     "flowbite": "^2.4.1",
@@ -51,7 +51,8 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "postcss": "^8.5.6",
     "tailwind-scrollbar": "^3.1.0",
-    "tailwindcss": "3.4.1"
+    "tailwindcss": "3.4.1",
+    "wait-on": "^8.0.3"
   },
   "build": {
     "appId": "com.lorendos.anixdesktop",

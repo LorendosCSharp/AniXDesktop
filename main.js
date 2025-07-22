@@ -8,7 +8,7 @@ log.transports.file.streamConfig = { encoding: 'utf8' };
 
 let mainWindow;
 let nextServer;
-const PORT = 4257;
+const PORT = 3000;
 const SERVER_URL = `http://localhost:${PORT}`;
 const LOADING_FILE = path.join(__dirname, 'public', 'loading.html');
 let menuVisibility = false;
